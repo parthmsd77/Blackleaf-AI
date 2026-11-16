@@ -365,5 +365,93 @@ $("#go").onclick=async()=>{
   button-text="Talk to Blackleaf"
   interaction-type="call"
 ></sarvam-widget>
+<script type="module">
+import {
+  ConversationAgent,
+  BrowserAudioInterface,
+  InteractionType,
+  AgentState,
+} from "https://esm.sh/sarvam-conv-ai-sdk@1.0.20/browser";
+
+const WORKER_URL = "https://sarvam-proxy.parthmsd77.workers.dev/";
+const IDLE_LABEL = "Talk to our agent";
+const GAIN = 5; // raise if the bars barely move, lower if they hit the ceiling
+
+const btn = document.getElementById("talk-btn");
+const hw = document.getElementById("hwave");
+const bars = [...hw.children];
+const shape = bars.map((_, i) => Math.sin((i / (bars.length - 1)) * Math.PI));
+
+let agent = null, busy = false, level = 0, smooth = 0, raf = null;
+
+function frame() {
+  smooth += (level - smooth) * 0.35;
+  level *= 0.85;
+  const t = performance.now();
+  bars.forEach((b, i) => {
+    const jitter = 0.65 + 0.35 * Math.abs(Math.sin(t / 120 + i * 0.7));
+    b.style.height = 6 + shape[i] * (8 + 66 * smooth * jitter) + "px";
+  });
+  raf = requestAnimationFrame(frame);
+}
+function waveOn() { hw.classList.add("live"); if (!raf) raf = requestAnimationFrame(frame); }
+function waveOff() {
+  cancelAnimationFrame(raf); raf = null; level = smooth = 0;
+  hw.classList.remove("live"); bars.forEach((b) => (b.style.height = ""));
+}
+function setIdle(label = IDLE_LABEL) {
+  btn.textContent = label; btn.classList.remove("on"); btn.disabled = false; waveOff();
+}
+
+async function startCall() {
+  busy = true; btn.disabled = true; btn.textContent = "Connecting…";
+  try {
+    agent = new ConversationAgent({
+      apiKey: "",
+      baseUrl: WORKER_URL,
+      config: {
+        org_id: "01a1e391-9f83-79e6-ae7a-5064d02a59a2",
+        workspace_id: "01a1e391-9f8a-769b-b2a4-611179e923e4",
+        app_id: "Conversatio-362811a3-1662",
+        user_identifier: "website-visitor",
+        user_identifier_type: "custom",
+        interaction_type: InteractionType.CALL,
+        input_sample_rate: 16000,
+        output_sample_rate: 16000,
+      },
+      audioInterface: new BrowserAudioInterface(),
+      stateCallback: (s) => {
+        if (s === AgentState.CONNECTED || s === AgentState.LISTENING || s === AgentState.SPEAKING) {
+          btn.textContent = "End call"; btn.classList.add("on"); btn.disabled = false; waveOn();
+        } else if (s === AgentState.ERROR) {
+          agent = null; setIdle("Couldn’t connect. Try again");
+        }
+      },
+      audioLevelCallback: (l) => {
+        const rms = typeof l === "number" ? l : (l && l.rms) || 0;
+        level = Math.min(1, rms * GAIN);
+      },
+      endCallback: async () => { agent = null; setIdle(); },
+    });
+    await agent.start();
+  } catch (err) {
+    console.error(err);
+    agent = null;
+    setIdle(err && err.name === "NotAllowedError" ? "Allow the microphone to talk" : "Couldn’t connect. Try again");
+    setTimeout(() => { if (!agent) btn.textContent = IDLE_LABEL; }, 4000);
+  } finally { busy = false; }
+}
+
+btn?.addEventListener("click", async () => {
+  if (busy) return;
+  if (agent) {
+    try { await agent.stop(); } catch (e) { console.error(e); }
+    agent = null; setIdle();
+  } else {
+    await startCall();
+  }
+});
+addEventListener("pagehide", () => { try { agent && agent.stop(); } catch (e) {} });
+</script>
 </body>
 </html>
