@@ -21,9 +21,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Blackleaf.ai","url":"https://blackleaf.ai","description":"AI voice agents for inbound and outbound calls, lead qualification, appointment scheduling and customer support."}</script>
-.hwave.live i{animation:none;opacity:1;transition:height .09s linear}
-#talk-btn.on{background:#2a2f2a;color:var(--ink);border-color:var(--green)}
-#talk-btn[disabled]{opacity:.7;cursor:progress}
  <style>
 :root{--bg:#121512;--surface:#1a1d1a;--line:#2a2f2a;--ink:#ece9e1;--mute:#9ba197;--green:#7fd49a;--green-d:#2f7a4b;
 --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;--body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
@@ -162,6 +159,9 @@ header{background:rgba(236,233,225,.95);border-bottom:1px solid #d5d1c5;color:#1
 nav ul{color:#4a5049}nav a:hover{color:#0b0d0b}
 .menu{border-color:#c6c2b6;color:#121512}
 #mnav{border-top-color:#d5d1c5}#mnav a{color:#4a5049}#mnav a.demo{color:#1d6a3a!important;font-weight:600}
+.hwave.live i{animation:none;opacity:1;transition:height .09s linear}
+#talk-btn.on{background:#2a2f2a;color:var(--ink);border-color:var(--green)}
+#talk-btn[disabled]{opacity:.7;cursor:progress}
 </style>
 </head>
 <body>
@@ -355,23 +355,13 @@ $("#go").onclick=async()=>{
   await sleep(350)}
  if(me===run)bubble(box,"a","Call complete. Imagine this on your own line.")};
 </script>
- <script src="https://unpkg.com/sarvam-convai-embed@1.0.20"></script>
-<sarvam-widget
-  session-endpoint="https://sarvam-proxy.parthmsd77.workers.dev/"
-  app-id="Conversatio-362811a3-1662"
-  org-id="01a1e391-9f83-79e6-ae7a-5064d02a59a2"
-  workspace-id="01a1e391-9f8a-769b-b2a4-611179e923e4"
-  user-id="website-visitor"
-  button-text="Talk to Blackleaf"
-  interaction-type="call"
-></sarvam-widget>
 <script type="module">
 import {
   ConversationAgent,
   BrowserAudioInterface,
   InteractionType,
   AgentState,
-} from "https://esm.sh/sarvam-conv-ai-sdk@1.0.20/browser";
+} from "https://esm.sh/sarvam-conv-ai-sdk@0.0.42/browser";
 
 const WORKER_URL = "https://sarvam-proxy.parthmsd77.workers.dev/";
 const IDLE_LABEL = "Talk to our agent";
