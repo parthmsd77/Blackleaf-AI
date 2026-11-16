@@ -21,7 +21,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Blackleaf.ai","url":"https://blackleaf.ai","description":"AI voice agents for inbound and outbound calls, lead qualification, appointment scheduling and customer support."}</script>
-<style>
+.hwave.live i{animation:none;opacity:1;transition:height .09s linear}
+#talk-btn.on{background:#2a2f2a;color:var(--ink);border-color:var(--green)}
+#talk-btn[disabled]{opacity:.7;cursor:progress}
+ <style>
 :root{--bg:#121512;--surface:#1a1d1a;--line:#2a2f2a;--ink:#ece9e1;--mute:#9ba197;--green:#7fd49a;--green-d:#2f7a4b;
 --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;--body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
@@ -186,7 +189,7 @@ nav ul{color:#4a5049}nav a:hover{color:#0b0d0b}
  <div class="wrap">
   <h1>AI voice agents that<br>answer and make calls</h1>
   <p class="lede">Trained on your business knowledge and workflows, our AI agents hold natural, human-like conversations with your customers.</p>
-  <div class="cta"><a class="btn primary demo" href="https://calendly.com/parthmsd77/ai-receptionist-demo" target="_blank" rel="noopener">Book a demo</a><a class="btn" href="#solutions">Explore solutions</a></div>
+  <div class="cta"><button class="btn primary" id="talk-btn" type="button">Talk to our agent</button><a class="btn" href="#solutions">Explore solutions</a></div>
   <div class="hwave" id="hwave" aria-hidden="true"></div>
   <p class="hero-note">Works with your existing phone line, calendar and CRM.</p>
  </div>
