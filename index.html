@@ -352,5 +352,16 @@ $("#go").onclick=async()=>{
   await sleep(350)}
  if(me===run)bubble(box,"a","Call complete. Imagine this on your own line.")};
 </script>
+ <script src="https://unpkg.com/sarvam-convai-embed"></script>
+<sarvam-widget
+  session-endpoint="/api/sarvam/"
+  app-id="<agent_id>"
+  org-id="<org_id>"
+  workspace-id="<workspace_id>"
+  user-id="your_user_id"
+  button-text="Begin call"
+  interaction-type="call"
+  logo-url="/your-logo.png"
+></sarvam-widget>
 </body>
 </html>
